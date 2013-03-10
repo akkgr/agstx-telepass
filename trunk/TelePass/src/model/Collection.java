@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Aggelos
+ * @author admin
  */
 @Entity
 @Table(name = "COLLECTION")
@@ -32,20 +32,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Collection.findAll", query = "SELECT c FROM Collection c"),
     @NamedQuery(name = "Collection.findById", query = "SELECT c FROM Collection c WHERE c.id = :id"),
-    @NamedQuery(name = "Collection.findByCardId", query = "SELECT c FROM Collection c WHERE c.cardId = :cardId"),
     @NamedQuery(name = "Collection.findByPassTimestamp", query = "SELECT c FROM Collection c WHERE c.passTimestamp = :passTimestamp"),
     @NamedQuery(name = "Collection.findByTollCollected", query = "SELECT c FROM Collection c WHERE c.tollCollected = :tollCollected")})
 public class Collection implements Serializable {
-    @JoinColumn(name = "CARD_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "STATION_ID", referencedColumnName = "ID")
     @ManyToOne
-    private Card cardId;
+    private Station stationId;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    
     @Basic(optional = false)
     @Column(name = "PASS_TIMESTAMP")
     @Temporal(TemporalType.DATE)
@@ -53,6 +51,9 @@ public class Collection implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "TOLL_COLLECTED")
     private BigDecimal tollCollected;
+    @JoinColumn(name = "CARD_ID", referencedColumnName = "ID")
+    @ManyToOne
+    private Card cardId;
 
     public Collection() {
     }
@@ -90,6 +91,14 @@ public class Collection implements Serializable {
         this.tollCollected = tollCollected;
     }
 
+    public Card getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(Card cardId) {
+        this.cardId = cardId;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -115,12 +124,12 @@ public class Collection implements Serializable {
         return "model.Collection[ id=" + id + " ]";
     }
 
-    public Card getCardId() {
-        return cardId;
+    public Station getStationId() {
+        return stationId;
     }
 
-    public void setCardId(Card cardId) {
-        this.cardId = cardId;
+    public void setStationId(Station stationId) {
+        this.stationId = stationId;
     }
     
 }

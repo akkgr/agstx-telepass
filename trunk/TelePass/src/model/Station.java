@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -16,12 +18,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Aggelos
+ * @author admin
  */
 @Entity
 @Table(name = "STATION")
@@ -33,8 +36,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Station.findByDistance", query = "SELECT s FROM Station s WHERE s.distance = :distance"),
     @NamedQuery(name = "Station.findByPhone", query = "SELECT s FROM Station s WHERE s.phone = :phone")})
 public class Station implements Serializable {
+    @Transient
+    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     @OneToMany(mappedBy = "stationId")
-    private List<ProgramRate> programRateList;
+    private List<Collection> collectionList;
+    @OneToMany(mappedBy = "stationId")
+    private List<Payment> paymentList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +54,8 @@ public class Station implements Serializable {
     private Integer distance;
     @Column(name = "PHONE")
     private String phone;
+    @OneToMany(mappedBy = "stationId")
+    private List<ProgramRate> programRateList;
     @OneToMany(mappedBy = "stationId")
     private List<AppUser> appUserList;
 
@@ -62,7 +71,9 @@ public class Station implements Serializable {
     }
 
     public void setId(Integer id) {
+        Integer oldId = this.id;
         this.id = id;
+        changeSupport.firePropertyChange("id", oldId, id);
     }
 
     public String getDescription() {
@@ -70,7 +81,9 @@ public class Station implements Serializable {
     }
 
     public void setDescription(String description) {
+        String oldDescription = this.description;
         this.description = description;
+        changeSupport.firePropertyChange("description", oldDescription, description);
     }
 
     public Integer getDistance() {
@@ -78,7 +91,9 @@ public class Station implements Serializable {
     }
 
     public void setDistance(Integer distance) {
+        Integer oldDistance = this.distance;
         this.distance = distance;
+        changeSupport.firePropertyChange("distance", oldDistance, distance);
     }
 
     public String getPhone() {
@@ -86,7 +101,18 @@ public class Station implements Serializable {
     }
 
     public void setPhone(String phone) {
+        String oldPhone = this.phone;
         this.phone = phone;
+        changeSupport.firePropertyChange("phone", oldPhone, phone);
+    }
+
+    @XmlTransient
+    public List<ProgramRate> getProgramRateList() {
+        return programRateList;
+    }
+
+    public void setProgramRateList(List<ProgramRate> programRateList) {
+        this.programRateList = programRateList;
     }
 
     @XmlTransient
@@ -120,16 +146,34 @@ public class Station implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Station[ id=" + id + " ]";
+        //return "model.Station[ id=" + id + " ]";
+        return this.getDescription();
     }
 
     @XmlTransient
-    public List<ProgramRate> getProgramRateList() {
-        return programRateList;
+    public List<Collection> getCollectionList() {
+        return collectionList;
     }
 
-    public void setProgramRateList(List<ProgramRate> programRateList) {
-        this.programRateList = programRateList;
+    public void setCollectionList(List<Collection> collectionList) {
+        this.collectionList = collectionList;
+    }
+
+    @XmlTransient
+    public List<Payment> getPaymentList() {
+        return paymentList;
+    }
+
+    public void setPaymentList(List<Payment> paymentList) {
+        this.paymentList = paymentList;
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
     
 }

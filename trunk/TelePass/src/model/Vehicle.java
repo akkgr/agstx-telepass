@@ -4,8 +4,6 @@
  */
 package model;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -18,12 +16,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Aggelos
+ * @author admin
  */
 @Entity
 @Table(name = "VEHICLE")
@@ -36,8 +33,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Vehicle.findByFactoryName", query = "SELECT v FROM Vehicle v WHERE v.factoryName = :factoryName"),
     @NamedQuery(name = "Vehicle.findByModelType", query = "SELECT v FROM Vehicle v WHERE v.modelType = :modelType")})
 public class Vehicle implements Serializable {
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,9 +69,7 @@ public class Vehicle implements Serializable {
     }
 
     public void setId(Integer id) {
-        Integer oldId = this.id;
         this.id = id;
-        changeSupport.firePropertyChange("id", oldId, id);
     }
 
     public String getRegNumber() {
@@ -84,9 +77,7 @@ public class Vehicle implements Serializable {
     }
 
     public void setRegNumber(String regNumber) {
-        String oldRegNumber = this.regNumber;
         this.regNumber = regNumber;
-        changeSupport.firePropertyChange("regNumber", oldRegNumber, regNumber);
     }
 
     public String getColour() {
@@ -94,9 +85,7 @@ public class Vehicle implements Serializable {
     }
 
     public void setColour(String colour) {
-        String oldColour = this.colour;
         this.colour = colour;
-        changeSupport.firePropertyChange("colour", oldColour, colour);
     }
 
     public String getFactoryName() {
@@ -104,9 +93,7 @@ public class Vehicle implements Serializable {
     }
 
     public void setFactoryName(String factoryName) {
-        String oldFactoryName = this.factoryName;
         this.factoryName = factoryName;
-        changeSupport.firePropertyChange("factoryName", oldFactoryName, factoryName);
     }
 
     public String getModelType() {
@@ -114,9 +101,7 @@ public class Vehicle implements Serializable {
     }
 
     public void setModelType(String modelType) {
-        String oldModelType = this.modelType;
         this.modelType = modelType;
-        changeSupport.firePropertyChange("modelType", oldModelType, modelType);
     }
 
     public VehicleCategory getCategoryId() {
@@ -124,9 +109,7 @@ public class Vehicle implements Serializable {
     }
 
     public void setCategoryId(VehicleCategory categoryId) {
-        VehicleCategory oldCategoryId = this.categoryId;
         this.categoryId = categoryId;
-        changeSupport.firePropertyChange("categoryId", oldCategoryId, categoryId);
     }
 
     public Customer getCustId() {
@@ -134,9 +117,7 @@ public class Vehicle implements Serializable {
     }
 
     public void setCustId(Customer custId) {
-        Customer oldCustId = this.custId;
         this.custId = custId;
-        changeSupport.firePropertyChange("custId", oldCustId, custId);
     }
 
     public Card getCardId() {
@@ -144,9 +125,7 @@ public class Vehicle implements Serializable {
     }
 
     public void setCardId(Card cardId) {
-        Card oldCardId = this.cardId;
         this.cardId = cardId;
-        changeSupport.firePropertyChange("cardId", oldCardId, cardId);
     }
 
     @Override
@@ -172,14 +151,6 @@ public class Vehicle implements Serializable {
     @Override
     public String toString() {
         return "model.Vehicle[ id=" + id + " ]";
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
     }
     
 }

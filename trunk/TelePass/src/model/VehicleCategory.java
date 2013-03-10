@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Aggelos
+ * @author admin
  */
 @Entity
 @Table(name = "VEHICLE_CATEGORY")
@@ -34,8 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "VehicleCategory.findById", query = "SELECT v FROM VehicleCategory v WHERE v.id = :id"),
     @NamedQuery(name = "VehicleCategory.findByDescription", query = "SELECT v FROM VehicleCategory v WHERE v.description = :description")})
 public class VehicleCategory implements Serializable {
-    @OneToMany(mappedBy = "categoryId")
-    private List<ProgramRate> programRateList;
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private static final long serialVersionUID = 1L;
@@ -46,6 +44,8 @@ public class VehicleCategory implements Serializable {
     private Integer id;
     @Column(name = "DESCRIPTION")
     private String description;
+    @OneToMany(mappedBy = "categoryId")
+    private List<ProgramRate> programRateList;
     @OneToMany(mappedBy = "categoryId")
     private List<Vehicle> vehicleList;
 
@@ -74,6 +74,15 @@ public class VehicleCategory implements Serializable {
         String oldDescription = this.description;
         this.description = description;
         changeSupport.firePropertyChange("description", oldDescription, description);
+    }
+
+    @XmlTransient
+    public List<ProgramRate> getProgramRateList() {
+        return programRateList;
+    }
+
+    public void setProgramRateList(List<ProgramRate> programRateList) {
+        this.programRateList = programRateList;
     }
 
     @XmlTransient
@@ -107,7 +116,8 @@ public class VehicleCategory implements Serializable {
 
     @Override
     public String toString() {
-        return "model.VehicleCategory[ id=" + id + " ]";
+        //return "model.VehicleCategory[ id=" + id + " ]";
+        return this.description;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -116,15 +126,6 @@ public class VehicleCategory implements Serializable {
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.removePropertyChangeListener(listener);
-    }
-
-    @XmlTransient
-    public List<ProgramRate> getProgramRateList() {
-        return programRateList;
-    }
-
-    public void setProgramRateList(List<ProgramRate> programRateList) {
-        this.programRateList = programRateList;
     }
     
 }
