@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -21,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Aggelos
+ * @author tasos
  */
 @Entity
 @Table(name = "CARD")
@@ -32,10 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Card.findByBarcode", query = "SELECT c FROM Card c WHERE c.barcode = :barcode"),
     @NamedQuery(name = "Card.findByBalance", query = "SELECT c FROM Card c WHERE c.balance = :balance")})
 public class Card implements Serializable {
-    @OneToMany(mappedBy = "cardId")
-    private List<Collection> collectionList;
-    @OneToMany(mappedBy = "cardId")
-    private List<Payment> paymentList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +46,14 @@ public class Card implements Serializable {
     @Column(name = "BALANCE")
     private Double balance;
     @OneToMany(mappedBy = "cardId")
+    private List<Collection> collectionList;
+    @OneToMany(mappedBy = "cardId")
+    private List<Payment> paymentList;
+    @OneToMany(mappedBy = "cardId")
     private List<Vehicle> vehicleList;
+    @JoinColumn(name = "PROGRAM_ID", referencedColumnName = "ID")
+    @ManyToOne
+    private Program programId;
 
     public Card() {
     }
@@ -82,12 +87,38 @@ public class Card implements Serializable {
     }
 
     @XmlTransient
+    public List<Collection> getCollectionList() {
+        return collectionList;
+    }
+
+    public void setCollectionList(List<Collection> collectionList) {
+        this.collectionList = collectionList;
+    }
+
+    @XmlTransient
+    public List<Payment> getPaymentList() {
+        return paymentList;
+    }
+
+    public void setPaymentList(List<Payment> paymentList) {
+        this.paymentList = paymentList;
+    }
+
+    @XmlTransient
     public List<Vehicle> getVehicleList() {
         return vehicleList;
     }
 
     public void setVehicleList(List<Vehicle> vehicleList) {
         this.vehicleList = vehicleList;
+    }
+
+    public Program getProgramId() {
+        return programId;
+    }
+
+    public void setProgramId(Program programId) {
+        this.programId = programId;
     }
 
     @Override
@@ -112,25 +143,8 @@ public class Card implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Card[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public List<Collection> getCollectionList() {
-        return collectionList;
-    }
-
-    public void setCollectionList(List<Collection> collectionList) {
-        this.collectionList = collectionList;
-    }
-
-    @XmlTransient
-    public List<Payment> getPaymentList() {
-        return paymentList;
-    }
-
-    public void setPaymentList(List<Payment> paymentList) {
-        this.paymentList = paymentList;
+        //return "model.Card[ id=" + id + " ]";
+        return this.barcode.toString();
     }
     
 }

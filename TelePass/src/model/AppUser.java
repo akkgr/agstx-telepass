@@ -5,7 +5,6 @@
 package model;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,14 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Aggelos
+ * @author admin
  */
 @Entity
 @Table(name = "APP_USER")
@@ -39,15 +36,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AppUser.findByPhone", query = "SELECT a FROM AppUser a WHERE a.phone = :phone"),
     @NamedQuery(name = "AppUser.findByEmail", query = "SELECT a FROM AppUser a WHERE a.email = :email"),
     @NamedQuery(name = "AppUser.findByAdt", query = "SELECT a FROM AppUser a WHERE a.adt = :adt"),
-    @NamedQuery(name = "AppUser.findByAfm", query = "SELECT a FROM AppUser a WHERE a.afm = :afm")})
+    @NamedQuery(name = "AppUser.findByAfm", query = "SELECT a FROM AppUser a WHERE a.afm = :afm"),
+    @NamedQuery(name = "AppUser.findByUserName", query = "SELECT a FROM AppUser a WHERE a.userName = :userName"),
+    @NamedQuery(name = "AppUser.findByPassword", query = "SELECT a FROM AppUser a WHERE a.password = :password")})
 public class AppUser implements Serializable {
-    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
-    @ManyToOne
-    private UserRole roleId;
-    @Column(name = "USER_NAME")
-    private String userName;
-    @Column(name = "PASSWORD")
-    private String password;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,7 +64,13 @@ public class AppUser implements Serializable {
     private String adt;
     @Column(name = "AFM")
     private Integer afm;
-    
+    @Column(name = "USER_NAME")
+    private String userName;
+    @Column(name = "PASSWORD")
+    private String password;
+    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
+    @ManyToOne
+    private UserRole roleId;
     @JoinColumn(name = "STATION_ID", referencedColumnName = "ID")
     @ManyToOne
     private Station stationId;
@@ -164,7 +162,29 @@ public class AppUser implements Serializable {
         this.afm = afm;
     }
 
-    
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public UserRole getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(UserRole roleId) {
+        this.roleId = roleId;
+    }
 
     public Station getStationId() {
         return stationId;
@@ -197,30 +217,6 @@ public class AppUser implements Serializable {
     @Override
     public String toString() {
         return "model.AppUser[ id=" + id + " ]";
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserRole getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(UserRole roleId) {
-        this.roleId = roleId;
     }
     
 }

@@ -4,12 +4,9 @@
  */
 package model;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,13 +16,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Aggelos
+ * @author admin
  */
 @Entity
 @Table(name = "CUSTOMER")
@@ -43,8 +39,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Customer.findByAdt", query = "SELECT c FROM Customer c WHERE c.adt = :adt"),
     @NamedQuery(name = "Customer.findByAfm", query = "SELECT c FROM Customer c WHERE c.afm = :afm")})
 public class Customer implements Serializable {
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,7 +63,7 @@ public class Customer implements Serializable {
     private String adt;
     @Column(name = "AFM")
     private Integer afm;
-    @OneToMany(mappedBy = "custId", cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy = "custId")
     private List<Vehicle> vehicleList;
 
     public Customer() {
@@ -84,9 +78,7 @@ public class Customer implements Serializable {
     }
 
     public void setId(Integer id) {
-        Integer oldId = this.id;
         this.id = id;
-        changeSupport.firePropertyChange("id", oldId, id);
     }
 
     public String getFName() {
@@ -94,9 +86,7 @@ public class Customer implements Serializable {
     }
 
     public void setFName(String fName) {
-        String oldFName = this.fName;
         this.fName = fName;
-        changeSupport.firePropertyChange("FName", oldFName, fName);
     }
 
     public String getLName() {
@@ -104,9 +94,7 @@ public class Customer implements Serializable {
     }
 
     public void setLName(String lName) {
-        String oldLName = this.lName;
         this.lName = lName;
-        changeSupport.firePropertyChange("LName", oldLName, lName);
     }
 
     public String getAddress() {
@@ -114,9 +102,7 @@ public class Customer implements Serializable {
     }
 
     public void setAddress(String address) {
-        String oldAddress = this.address;
         this.address = address;
-        changeSupport.firePropertyChange("address", oldAddress, address);
     }
 
     public Integer getZipCode() {
@@ -124,9 +110,7 @@ public class Customer implements Serializable {
     }
 
     public void setZipCode(Integer zipCode) {
-        Integer oldZipCode = this.zipCode;
         this.zipCode = zipCode;
-        changeSupport.firePropertyChange("zipCode", oldZipCode, zipCode);
     }
 
     public String getCity() {
@@ -134,9 +118,7 @@ public class Customer implements Serializable {
     }
 
     public void setCity(String city) {
-        String oldCity = this.city;
         this.city = city;
-        changeSupport.firePropertyChange("city", oldCity, city);
     }
 
     public String getPhone() {
@@ -144,9 +126,7 @@ public class Customer implements Serializable {
     }
 
     public void setPhone(String phone) {
-        String oldPhone = this.phone;
         this.phone = phone;
-        changeSupport.firePropertyChange("phone", oldPhone, phone);
     }
 
     public String getEmail() {
@@ -154,9 +134,7 @@ public class Customer implements Serializable {
     }
 
     public void setEmail(String email) {
-        String oldEmail = this.email;
         this.email = email;
-        changeSupport.firePropertyChange("email", oldEmail, email);
     }
 
     public String getAdt() {
@@ -164,9 +142,7 @@ public class Customer implements Serializable {
     }
 
     public void setAdt(String adt) {
-        String oldAdt = this.adt;
         this.adt = adt;
-        changeSupport.firePropertyChange("adt", oldAdt, adt);
     }
 
     public Integer getAfm() {
@@ -174,9 +150,7 @@ public class Customer implements Serializable {
     }
 
     public void setAfm(Integer afm) {
-        Integer oldAfm = this.afm;
         this.afm = afm;
-        changeSupport.firePropertyChange("afm", oldAfm, afm);
     }
 
     @XmlTransient
@@ -211,14 +185,6 @@ public class Customer implements Serializable {
     @Override
     public String toString() {
         return "model.Customer[ id=" + id + " ]";
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
     }
     
 }

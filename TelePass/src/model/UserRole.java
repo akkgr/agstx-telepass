@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Aggelos
+ * @author admin
  */
 @Entity
 @Table(name = "USER_ROLE")
@@ -107,7 +107,8 @@ public class UserRole implements Serializable {
 
     @Override
     public String toString() {
-        return "model.UserRole[ id=" + id + " ]";
+        //return "model.UserRole[ id=" + id + " ]";
+        return this.getRoleName();
     }
     
 }

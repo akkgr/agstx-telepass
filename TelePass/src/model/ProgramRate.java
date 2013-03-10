@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Aggelos
+ * @author admin
  */
 @Entity
 @Table(name = "PROGRAM_RATE")
@@ -31,9 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ProgramRate.findById", query = "SELECT p FROM ProgramRate p WHERE p.id = :id"),
     @NamedQuery(name = "ProgramRate.findByRate", query = "SELECT p FROM ProgramRate p WHERE p.rate = :rate")})
 public class ProgramRate implements Serializable {
-    @JoinColumn(name = "PROGRAM_ID", referencedColumnName = "ID")
-    @ManyToOne
-    private Program programId;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +46,9 @@ public class ProgramRate implements Serializable {
     @JoinColumn(name = "STATION_ID", referencedColumnName = "ID")
     @ManyToOne
     private Station stationId;
+    @JoinColumn(name = "PROGRAM_ID", referencedColumnName = "ID")
+    @ManyToOne
+    private Program programId;
 
     public ProgramRate() {
     }
@@ -89,6 +89,14 @@ public class ProgramRate implements Serializable {
         this.stationId = stationId;
     }
 
+    public Program getProgramId() {
+        return programId;
+    }
+
+    public void setProgramId(Program programId) {
+        this.programId = programId;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -103,23 +111,19 @@ public class ProgramRate implements Serializable {
             return false;
         }
         ProgramRate other = (ProgramRate) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
+//        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+//            return false;
+//        }
+//        return true;
+        if (this.programId == other.programId && this.stationId == other.stationId && this.categoryId == other.categoryId) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override
     public String toString() {
         return "model.ProgramRate[ id=" + id + " ]";
-    }
-
-    public Program getProgramId() {
-        return programId;
-    }
-
-    public void setProgramId(Program programId) {
-        this.programId = programId;
     }
     
 }

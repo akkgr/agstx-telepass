@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Aggelos
+ * @author tasos
  */
 @Entity
 @Table(name = "PAYMENT")
@@ -32,13 +32,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p"),
     @NamedQuery(name = "Payment.findById", query = "SELECT p FROM Payment p WHERE p.id = :id"),
-    @NamedQuery(name = "Payment.findByCardId", query = "SELECT p FROM Payment p WHERE p.cardId = :cardId"),
     @NamedQuery(name = "Payment.findByPaymentTimestamp", query = "SELECT p FROM Payment p WHERE p.paymentTimestamp = :paymentTimestamp"),
-    @NamedQuery(name = "Payment.findByOldBalance", query = "SELECT p FROM Payment p WHERE p.oldBalance = :oldBalance")})
+    @NamedQuery(name = "Payment.findByOldBalance", query = "SELECT p FROM Payment p WHERE p.oldBalance = :oldBalance"),
+    @NamedQuery(name = "Payment.findByPayment", query = "SELECT p FROM Payment p WHERE p.payment = :payment")})
 public class Payment implements Serializable {
-    @JoinColumn(name = "CARD_ID", referencedColumnName = "ID")
-    @ManyToOne
-    private Card cardId;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +49,14 @@ public class Payment implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "OLD_BALANCE")
     private BigDecimal oldBalance;
+    @Column(name = "PAYMENT")
+    private BigDecimal payment;
+    @JoinColumn(name = "STATION_ID", referencedColumnName = "ID")
+    @ManyToOne
+    private Station stationId;
+    @JoinColumn(name = "CARD_ID", referencedColumnName = "ID")
+    @ManyToOne
+    private Card cardId;
 
     public Payment() {
     }
@@ -89,6 +94,30 @@ public class Payment implements Serializable {
         this.oldBalance = oldBalance;
     }
 
+    public BigDecimal getPayment() {
+        return payment;
+    }
+
+    public void setPayment(BigDecimal payment) {
+        this.payment = payment;
+    }
+
+    public Station getStationId() {
+        return stationId;
+    }
+
+    public void setStationId(Station stationId) {
+        this.stationId = stationId;
+    }
+
+    public Card getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(Card cardId) {
+        this.cardId = cardId;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -112,14 +141,6 @@ public class Payment implements Serializable {
     @Override
     public String toString() {
         return "model.Payment[ id=" + id + " ]";
-    }
-
-    public Card getCardId() {
-        return cardId;
-    }
-
-    public void setCardId(Card cardId) {
-        this.cardId = cardId;
     }
     
 }

@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Aggelos
+ * @author admin
  */
 @Entity
 @Table(name = "MODULE")
@@ -100,7 +100,7 @@ public class Module implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Module[ id=" + id + " ]";
+        return description;//"model.Module[ id=" + id + " ]";
     }
     
 }
