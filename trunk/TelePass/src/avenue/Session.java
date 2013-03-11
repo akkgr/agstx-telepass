@@ -46,11 +46,18 @@ public class Session {
                 return rp;
             }                
         }
-        return null;
+        
+        RolePermission rp = new RolePermission();
+        rp.setCanCreate(false);
+        rp.setCanRetrieve(false);
+        rp.setCanUpdate(false);
+        rp.setCanDelete(false);
+        rp.setStationLevelAccess(true);
+        return rp;
     }
     
     public static boolean CheckPermission(int module) {
-        if (GetPermission(module) == null) {
+        if (GetPermission(module).getCanRetrieve() == false) {
             JOptionPane.showMessageDialog(null, "Δεν έχετε δικαίωμα πρόσβασης στην επιλογή.",
                                           "Προσοχή",JOptionPane.INFORMATION_MESSAGE);
             return false;
